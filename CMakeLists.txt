@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.14)
+project(TrafficFlowDT LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_library(traffic_core
+  src/Vehicle.cpp src/TrafficSignal.cpp src/FixedTimeController.cpp
+  src/AdaptiveSignalController.cpp src/Metrics.cpp src/TrafficSimulator.cpp)
+target_include_directories(traffic_core PUBLIC include)
+target_compile_options(traffic_core PRIVATE -Wall -Wextra -Wpedantic)
+add_executable(traffic_sim src/main.cpp)
+target_link_libraries(traffic_sim PRIVATE traffic_core)
+add_executable(traffic_tests tests/tests.cpp)
+target_link_libraries(traffic_tests PRIVATE traffic_core)
+enable_testing()
+add_test(NAME traffic_tests COMMAND traffic_tests)
